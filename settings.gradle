@@ -1,2 +1,4 @@
-include ':app'
 rootProject.name = "Android-Webview"
+include ':app'
+include ':JavaLib'
+include ':lib-android'
