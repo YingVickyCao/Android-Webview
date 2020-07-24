@@ -6,7 +6,8 @@
 
     <TextView
         style="@style/topic"
-        android:text="@string/page_webView" />
+        android:text="@string/page_webView"
+        android:visibility="gone" />
 
     <WebView
         android:id="@+id/webView"
