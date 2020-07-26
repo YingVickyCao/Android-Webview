@@ -1,6 +1,7 @@
 package com.hades.example.android.webview;
 
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +30,8 @@ public class TestWebViewFragment extends BaseFragment {
 
 //        loadOnlineUrl();
 //        loadAssertFolderHtml();
-        loadSDCardHtml();
+//        loadSDCardHtml();
+        loadURLFromAnHTMLString();
     }
 
     private void loadOnlineUrl() {
@@ -52,5 +54,21 @@ public class TestWebViewFragment extends BaseFragment {
         mWebView.loadUrl("file:///sdcard/full/index.html"); // not ok. Can Swipe pages up/down,but content is white
 //        mWebView.loadUrl("file:///sdcard/full/index.html?page=1"); // not ok. Can Swipe pages up/down,but content is white
 //        mWebView.loadUrl("file:///sdcard/full/1.html"); // not ok, page 1 is showed,but sth is lost, e.g.,bg or grid
+    }
+
+    private void loadURLFromAnHTMLString() {
+        // Create an unencoded HTML string
+// then convert the unencoded HTML string into bytes, encode
+// it with Base64, and load the data.
+//        String unencodedHtml = "&lt;html&gt;&lt;body&gt;'%23' is the percent code for ‘#‘ &lt;/body&gt;&lt;/html&gt;";
+//        String encodedHtml = Base64.encodeToString(unencodedHtml.getBytes(), Base64.NO_PADDING);
+//        mWebView.loadData(encodedHtml, "text/html", "base64");
+
+        String unencodedHtml =
+                "<html><body>'%28' is the code for '('</body></html>";
+        String encodedHtml = Base64.encodeToString(unencodedHtml.getBytes(), Base64.NO_PADDING);
+        mWebView.loadData(encodedHtml, "text/html", "base64");
+
+//        TODO:See loadData() and loadDataWithBaseU
     }
 }
