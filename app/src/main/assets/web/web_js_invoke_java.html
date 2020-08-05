@@ -5,11 +5,12 @@
     <title id="title">Title</title>
 </head>
 <script language="JavaScript">
-       function sum(n1, n2){
-            alert(n1 + n2);
+       function callAndroid(){
+         android.showToast('JS 唤起 Android Toast')
        }
 </script>
 <body>
 <h1> JS invoke Java </h1>
+<button type="button" id="button1" onclick="callAndroid()">show Android toast</button>
 </body>
 </html>

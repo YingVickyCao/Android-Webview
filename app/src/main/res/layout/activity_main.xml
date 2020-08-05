@@ -36,6 +36,11 @@
                 android:id="@+id/pageWebView_JavaInvokeJS"
                 style="@style/btn.small"
                 android:text="WebView - Java invoke JS" />
+
+            <Button
+                android:id="@+id/pageWebView_JSInvokeJava"
+                style="@style/btn.small"
+                android:text="WebView - JS invoke Java" />
         </LinearLayout>
     </ScrollView>
 

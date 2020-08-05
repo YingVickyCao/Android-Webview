@@ -21,6 +21,7 @@ public class MainActivity extends PermissionActivity {
         findViewById(R.id.openInExtraBrowser).setOnClickListener(v -> openInExtraBrowser());
         findViewById(R.id.pageWebView).setOnClickListener(v -> pageWebView());
         findViewById(R.id.pageWebView_JavaInvokeJS).setOnClickListener(v -> pageWebView_JavaInvokeJS());
+        findViewById(R.id.pageWebView_JSInvokeJava).setOnClickListener(v -> pageWebView_JSInvokeJava());
         showCurrentTest();
     }
 
@@ -34,7 +35,8 @@ public class MainActivity extends PermissionActivity {
         scrollView.setVisibility(View.GONE);
 //        openInExtraBrowser();
 //        pageWebView();
-        pageWebView_JavaInvokeJS();
+//        pageWebView_JavaInvokeJS();
+        pageWebView_JSInvokeJava();
     }
 
     private void openInExtraBrowser() {
@@ -49,6 +51,10 @@ public class MainActivity extends PermissionActivity {
 
     private void pageWebView_JavaInvokeJS() {
         showFragment(new TestWebView4JavaInvokeJsFragment());
+    }
+
+    private void pageWebView_JSInvokeJava() {
+        showFragment(new TestWebView4JSInvokeJavaFragment());
     }
 
     @Override
