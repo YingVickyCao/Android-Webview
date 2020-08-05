@@ -56,7 +56,6 @@ public class TestWebViewFragment extends BaseFragment implements IBackPressed {
         mWebView = view.findViewById(R.id.webView);
         mLoadingView = view.findViewById(R.id.progress);
         mLoadingText = view.findViewById(R.id.loadingText);
-        view.findViewById(R.id.javaInvokeJSFunction).setOnClickListener(v -> javaInvokeJSFunction());
         return view;
     }
 
@@ -69,17 +68,6 @@ public class TestWebViewFragment extends BaseFragment implements IBackPressed {
         loadAssertFolderHtml();
 //        loadSDCardHtml();
 //        loadURLFromAnHTMLString();
-    }
-
-    private void javaInvokeJSFunction() {
-        // TODO: 只能show 第一次，再次点击，没有效果
-        mWebView.loadUrl("javascript:sum(2,5)");
-//        mWebView.evaluateJavascript("callJS()", new ValueCallback<String>() {
-//            @Override
-//            public void onReceiveValue(String value) {
-//                Toast.makeText(getActivity(), value, Toast.LENGTH_LONG).show();
-//            }
-//        });
     }
 
     private void loadOnlineUrl() {
@@ -197,8 +185,6 @@ public class TestWebViewFragment extends BaseFragment implements IBackPressed {
         // 比例缩放：设置了此项，当页面加载完成后，就按比例显示页面。如果不手动缩放，缩放比例不会变
 //        mWebView.setInitialScale(100);  //
 
-        mWebView.addJavascriptInterface(new JavaObject(getActivity()),"android");
-
         mWebView.setWebChromeClient(new WebChromeClient() {
 
             // 获取网站标题
@@ -248,22 +234,9 @@ public class TestWebViewFragment extends BaseFragment implements IBackPressed {
 
             @Override
             public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
-                AlertDialog.Builder b = new AlertDialog.Builder(getActivity());
-                b.setTitle("Alert");
-                b.setMessage(message);
-                b.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        result.confirm();
-                    }
-                });
-                b.setCancelable(false);
-                b.create().show();
-                return true;
-//                return super.onJsAlert(view, url, message, result);
+                return super.onJsAlert(view, url, message, result);
             }
         });
-
 
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
