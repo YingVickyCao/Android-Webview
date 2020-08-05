@@ -35,8 +35,8 @@ public class MainActivity extends PermissionActivity {
         scrollView.setVisibility(View.GONE);
 //        openInExtraBrowser();
 //        pageWebView();
-//        pageWebView_JavaInvokeJS();
-        pageWebView_JSInvokeJava();
+        pageWebView_JavaInvokeJS();
+//        pageWebView_JSInvokeJava();
     }
 
     private void openInExtraBrowser() {

@@ -131,7 +131,7 @@ public class TestWebViewFragment extends BaseFragment implements IBackPressed {
             // 缩放
             webSettings.setBuiltInZoomControls(true);   // 设置内置的缩放控件。若为false，则该WebView不可缩放
             webSettings.setDisplayZoomControls(false);  // 隐藏原生的缩放控件. 默认：不隐藏
-//            webSettings.setTextZoom(2);                 // 设置文本的缩放倍数，默认为 100
+//            webSettings.setTextZoom(2);               // 设置文本的缩放倍数，默认为 100
             webSettings.setSupportZoom(true);           // 当setBuiltInZoomControls(true)前提下，支持缩放
             webSettings.setUseWideViewPort(true);
 

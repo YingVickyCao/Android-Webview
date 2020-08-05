@@ -90,7 +90,6 @@ public class TestWebView4JavaInvokeJsFragment extends BaseFragment implements IB
         WebSettings webSettings = mWebView.getSettings();
         if (null != webSettings) {
             webSettings.setJavaScriptEnabled(true);
-            webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
         }
 
         mWebView.setWebChromeClient(new WebChromeClient() {
