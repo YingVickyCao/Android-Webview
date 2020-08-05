@@ -64,8 +64,8 @@ public class TestWebViewFragment extends BaseFragment implements IBackPressed {
         super.onViewCreated(view, savedInstanceState);
         setWebView();
 
-//        loadOnlineUrl();
-        loadAssertFolderHtml();
+        loadOnlineUrl();
+//        loadAssertFolderHtml();
 //        loadSDCardHtml();
 //        loadURLFromAnHTMLString();
     }
@@ -124,16 +124,17 @@ public class TestWebViewFragment extends BaseFragment implements IBackPressed {
         if (null != webSettings) {
             //  Support JS
             webSettings.setJavaScriptEnabled(true);
-            webSettings.setJavaScriptCanOpenWindowsAutomatically(true); //支持通过JS打开新窗口
+
+            //支持通过JS打开新窗口
+            webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
 
             // TODO:支持插件
 
             // 缩放
             webSettings.setBuiltInZoomControls(true);   // 设置内置的缩放控件。若为false，则该WebView不可缩放
-            webSettings.setDisplayZoomControls(false);  // 隐藏原生的缩放控件. 默认：不隐藏
-//            webSettings.setTextZoom(2);               // 设置文本的缩放倍数，默认为 100
             webSettings.setSupportZoom(true);           // 当setBuiltInZoomControls(true)前提下，支持缩放
-            webSettings.setUseWideViewPort(true);
+            webSettings.setDisplayZoomControls(false);  // 隐藏原生的缩放控件. 默认：不隐藏
+            webSettings.setTextZoom(200);               // 设置文本的缩放倍数，默认为 100
 
             // 字体
             webSettings.setStandardFontFamily("sans-serif");//设置 WebView 的字体，默认字体为 "sans-serif"
@@ -141,10 +142,11 @@ public class TestWebViewFragment extends BaseFragment implements IBackPressed {
             webSettings.setMinimumFontSize(12);//设置 WebView 支持的最小字体大小，默认为 8
 
             //文件权限
-            webSettings.setAllowFileAccess(true);
-            webSettings.setAllowFileAccessFromFileURLs(true);
+            webSettings.setAllowFileAccess(true);       // 是否允许访问WebView内部文件，默认true
+            webSettings.setAllowFileAccessFromFileURLs(true);   // 是否允许获取WebView的内容URL ，可以让WebView访问ContentPrivider存储的内容。 默认true
             webSettings.setAllowUniversalAccessFromFileURLs(true);
             webSettings.setAllowContentAccess(true);
+
 
             // 使用缓存
             webSettings.setDomStorageEnabled(true); // 开启 DOM storage API 功能
@@ -155,27 +157,25 @@ public class TestWebViewFragment extends BaseFragment implements IBackPressed {
             String cacheDirPath = getActivity().getFilesDir().getAbsolutePath() + APP_CACAHE_DIRNAME;
             webSettings.setAppCachePath(cacheDirPath); //设置  Application Caches 缓存目录
 
-//            webSettings.setUserAgentString("User-Agent:MicroMessenger");//设置用户代理
+            //设置用户代理
+//            webSettings.setUserAgentString("User-Agent:MicroMessenger");
 
             // 自适应手机屏幕
-//            webSettings.setUseWideViewPort(true);           // 将图片调整到适合webView的大小
-            webSettings.setLoadWithOverviewMode(true);      // 缩放至屏幕大小
-
-            webSettings.setLoadsImagesAutomatically(true);  //支持自动加载图片
+            webSettings.setUseWideViewPort(true);           // 将图片调整到适合webView的大小
+            webSettings.setLoadWithOverviewMode(true);          // 是否启动概述模式浏览界面，当页面宽度超过WebView显示宽度时，缩小页面适应WebView。默认false
             webSettings.setDefaultTextEncodingName("utf-8");//设置编码格式
-
             webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN); //支持内容重新布局
+            webSettings.setLoadsImagesAutomatically(true);      //支持自动加载图片
 
-            webSettings.supportMultipleWindows();       // 多窗口
+            // 多窗口
+            webSettings.supportMultipleWindows();
 
             webSettings.setNeedInitialFocus(true); //当webview调用requestFocus时为webview设置节点
             mWebView.requestFocusFromTouch();   // 获取焦点
 
             // Android5.0 WebView中Http和Https混合问题
             // 在Android 5.0上 Webview 默认不允许加载 Http 与 Https 混合内容
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                mWebView.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
-            }
+            webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
 
             mWebView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
             mWebView.setHorizontalScrollBarEnabled(true);
