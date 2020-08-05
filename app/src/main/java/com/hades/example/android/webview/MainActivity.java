@@ -4,19 +4,23 @@ import android.Manifest;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.fragment.app.Fragment;
 
 import com.hades.example.android.lib.base.PermissionActivity;
 
 public class MainActivity extends PermissionActivity {
+    View scrollView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        scrollView = findViewById(R.id.scrollView);
         findViewById(R.id.openInExtraBrowser).setOnClickListener(v -> openInExtraBrowser());
         findViewById(R.id.pageWebView).setOnClickListener(v -> pageWebView());
+        findViewById(R.id.pageWebView_JavaInvokeJS).setOnClickListener(v -> pageWebView_JavaInvokeJS());
         showCurrentTest();
     }
 
@@ -27,8 +31,10 @@ public class MainActivity extends PermissionActivity {
 
     @Override
     protected void showCurrentTest() {
+        scrollView.setVisibility(View.GONE);
 //        openInExtraBrowser();
-        pageWebView();
+//        pageWebView();
+        pageWebView_JavaInvokeJS();
     }
 
     private void openInExtraBrowser() {
@@ -41,10 +47,14 @@ public class MainActivity extends PermissionActivity {
         showFragment(new TestWebViewFragment());
     }
 
+    private void pageWebView_JavaInvokeJS() {
+        showFragment(new TestWebView4JavaInvokeJsFragment());
+    }
+
     @Override
     public void onBackPressed() {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragmentRoot);
-        if (null != fragment && fragment instanceof IBackPressed) {
+        if (fragment instanceof IBackPressed) {
             ((IBackPressed) fragment).onBackPressed();
             return;
         }

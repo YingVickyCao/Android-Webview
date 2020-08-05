@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        style="@style/topic"
+        android:text="@string/page_webView"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/javaInvokeJSFunction_Alert"
+            style="@style/btn.small"
+            android:text="Java invoke JS Function - Alert" />
+
+        <Button
+            android:id="@+id/javaInvokeJSFunction_Confirm"
+            style="@style/btn.small"
+            android:text="Java invoke JS Function - Confirm" />
+
+        <Button
+            android:id="@+id/javaInvokeJSFunction_Prompt"
+            style="@style/btn.small"
+            android:text="Java invoke JS Function - Prompt" />
+    </LinearLayout>
+
+    <WebView
+        android:id="@+id/webView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>

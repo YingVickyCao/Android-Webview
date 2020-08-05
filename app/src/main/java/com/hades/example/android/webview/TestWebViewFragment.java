@@ -1,5 +1,7 @@
 package com.hades.example.android.webview;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.net.http.SslError;
 import android.os.Build;
@@ -12,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.ClientCertRequest;
-import android.webkit.DownloadListener;
 import android.webkit.HttpAuthHandler;
 import android.webkit.JsPromptResult;
 import android.webkit.JsResult;
@@ -26,7 +27,6 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -38,12 +38,16 @@ import java.util.Objects;
 public class TestWebViewFragment extends BaseFragment implements IBackPressed {
     private static final String TAG = TestWebViewFragment.class.getSimpleName();
 
+    private final String ONLINE_URL_1 = "https://developer.android.google.cn/guide/webapps";
+    private final String ONLINE_URL_2 = "https://www.cnblogs.com/chhom/p/4758103.html";
+    private final String UNENCODED_HTML = "<html><body>'%28' is the code for '('</body></html>";
+
+    private final String APP_CACAHE_DIRNAME = "/sdcard/yc/app_cache";
+
     private WebView mWebView;
     private TextView mLoadingText;
     private View mLoadingView;
-    private final String ONLINE_URL_1 = "https://developer.android.google.cn/guide/webapps";
-    private final String ONLINE_URL_2 = "https://www.cnblogs.com/chhom/p/4758103.html";
-    private final String APP_CACAHE_DIRNAME = "/sdcard/yc/app_cache";
+
 
     @Nullable
     @Override
@@ -52,6 +56,7 @@ public class TestWebViewFragment extends BaseFragment implements IBackPressed {
         mWebView = view.findViewById(R.id.webView);
         mLoadingView = view.findViewById(R.id.progress);
         mLoadingText = view.findViewById(R.id.loadingText);
+        view.findViewById(R.id.javaInvokeJSFunction).setOnClickListener(v -> javaInvokeJSFunction());
         return view;
     }
 
@@ -61,9 +66,20 @@ public class TestWebViewFragment extends BaseFragment implements IBackPressed {
         setWebView();
 
 //        loadOnlineUrl();
-//        loadAssertFolderHtml();
-        loadSDCardHtml();
+        loadAssertFolderHtml();
+//        loadSDCardHtml();
 //        loadURLFromAnHTMLString();
+    }
+
+    private void javaInvokeJSFunction() {
+        // TODO: 只能show 第一次，再次点击，没有效果
+        mWebView.loadUrl("javascript:sum(2,5)");
+//        mWebView.evaluateJavascript("callJS()", new ValueCallback<String>() {
+//            @Override
+//            public void onReceiveValue(String value) {
+//                Toast.makeText(getActivity(), value, Toast.LENGTH_LONG).show();
+//            }
+//        });
     }
 
     private void loadOnlineUrl() {
@@ -72,7 +88,7 @@ public class TestWebViewFragment extends BaseFragment implements IBackPressed {
     }
 
     private void loadAssertFolderHtml() {
-        //  mWebView.loadUrl("file:///android_asset/web/maven.html");
+        mWebView.loadUrl("file:///android_asset/web/maven.html");
     }
 
     private void loadSDCardHtml() {
@@ -83,10 +99,9 @@ public class TestWebViewFragment extends BaseFragment implements IBackPressed {
     }
 
     private void loadURLFromAnHTMLString() {
-        String unencodedHtml = "<html><body>'%28' is the code for '('</body></html>";
-//        mWebView.loadData(unencodedHtml, "text/html", "UFT-8");
+//        mWebView.loadData(UNENCODED_HTML, "text/html", "UFT-8");
 
-        String encodedHtml = Base64.encodeToString(unencodedHtml.getBytes(), Base64.NO_PADDING);
+        String encodedHtml = Base64.encodeToString(UNENCODED_HTML.getBytes(), Base64.NO_PADDING);
         mWebView.loadData(encodedHtml, "text/html", "base64");
 //        TODO: loadData() and loadDataWithBaseURL
     }
@@ -94,14 +109,12 @@ public class TestWebViewFragment extends BaseFragment implements IBackPressed {
     @Override
     public void onResume() {
         super.onResume();
-        // 激活WebView为活跃状态，能正常执行网页的响应
         mWebView.onResume();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        // 当页面被失去焦点被切换到后台不可见状态，需要执行onPause: 通知内核暂停所有的动作，比如DOM的解析、plugin的执行、JavaScript执行。
         mWebView.onPause();
     }
 
@@ -179,12 +192,12 @@ public class TestWebViewFragment extends BaseFragment implements IBackPressed {
             mWebView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
             mWebView.setHorizontalScrollBarEnabled(true);
             mWebView.setHorizontalFadingEdgeEnabled(true);
-
-            
         }
 
         // 比例缩放：设置了此项，当页面加载完成后，就按比例显示页面。如果不手动缩放，缩放比例不会变
 //        mWebView.setInitialScale(100);  //
+
+        mWebView.addJavascriptInterface(new JavaObject(getActivity()),"android");
 
         mWebView.setWebChromeClient(new WebChromeClient() {
 
@@ -235,7 +248,19 @@ public class TestWebViewFragment extends BaseFragment implements IBackPressed {
 
             @Override
             public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
-                return super.onJsAlert(view, url, message, result);
+                AlertDialog.Builder b = new AlertDialog.Builder(getActivity());
+                b.setTitle("Alert");
+                b.setMessage(message);
+                b.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        result.confirm();
+                    }
+                });
+                b.setCancelable(false);
+                b.create().show();
+                return true;
+//                return super.onJsAlert(view, url, message, result);
             }
         });
 
@@ -273,16 +298,16 @@ public class TestWebViewFragment extends BaseFragment implements IBackPressed {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
                 // 打开link时，默认使用外部浏览器
-//                boolean result = super.shouldOverrideUrlLoading(view, request);
-//                Log.d(TAG, "shouldOverrideUrlLoading:url=" + request.getUrl() + ",result=" + result);
-//                return result;
+                boolean result = super.shouldOverrideUrlLoading(view, request);
+                Log.d(TAG, "shouldOverrideUrlLoading:url=" + request.getUrl() + ",result=" + result);
+                return result;
 
                 // 打开link时，不使用外部浏览器，而是使用当前WebView
-                Log.d(TAG, "shouldOverrideUrlLoading: url:" + request.getUrl());
-                Log.d(TAG, "shouldOverrideUrlLoading: RequestHeaders:" + request.getRequestHeaders());
-                Log.d(TAG, "shouldOverrideUrlLoading: Method:" + request.getMethod());
-                mWebView.loadUrl(request.getUrl().toString());
-                return true;
+//                Log.d(TAG, "shouldOverrideUrlLoading: url:" + request.getUrl());
+//                Log.d(TAG, "shouldOverrideUrlLoading: RequestHeaders:" + request.getRequestHeaders());
+//                Log.d(TAG, "shouldOverrideUrlLoading: Method:" + request.getMethod());
+//                mWebView.loadUrl(request.getUrl().toString());
+//                return true;
             }
 
             @Override
