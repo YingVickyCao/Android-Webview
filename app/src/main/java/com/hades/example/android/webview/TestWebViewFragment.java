@@ -134,7 +134,7 @@ public class TestWebViewFragment extends BaseFragment implements IBackPressed {
             webSettings.setBuiltInZoomControls(true);   // 设置内置的缩放控件。若为false，则该WebView不可缩放
             webSettings.setSupportZoom(true);           // 当setBuiltInZoomControls(true)前提下，支持缩放
             webSettings.setDisplayZoomControls(false);  // 隐藏原生的缩放控件. 默认：不隐藏
-            webSettings.setTextZoom(200);               // 设置文本的缩放倍数，默认为 100
+            webSettings.setTextZoom(100);               // 设置文本的缩放倍数，默认为 100
 
             // 字体
             webSettings.setStandardFontFamily("sans-serif");//设置 WebView 的字体，默认字体为 "sans-serif"
@@ -274,13 +274,6 @@ public class TestWebViewFragment extends BaseFragment implements IBackPressed {
                 boolean result = super.shouldOverrideUrlLoading(view, request);
                 Log.d(TAG, "shouldOverrideUrlLoading:url=" + request.getUrl() + ",result=" + result);
                 return result;
-
-                // 打开link时，不使用外部浏览器，而是使用当前WebView
-//                Log.d(TAG, "shouldOverrideUrlLoading: url:" + request.getUrl());
-//                Log.d(TAG, "shouldOverrideUrlLoading: RequestHeaders:" + request.getRequestHeaders());
-//                Log.d(TAG, "shouldOverrideUrlLoading: Method:" + request.getMethod());
-//                mWebView.loadUrl(request.getUrl().toString());
-//                return true;
             }
 
             @Override
