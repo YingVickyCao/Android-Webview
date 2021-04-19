@@ -250,6 +250,12 @@ public class TestWebViewFragment extends BaseFragment implements IBackPressed {
                 return super.shouldInterceptRequest(view, request);
             }
 
+            @Override
+            public void onLoadResource(WebView view, String url) {
+                super.onLoadResource(view, url);
+                Log.d(TAG, "onLoadResource: url=" + url);
+            }
+
             // 开始加载 URL
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
@@ -323,11 +329,6 @@ public class TestWebViewFragment extends BaseFragment implements IBackPressed {
             }
 
             @Override
-            public void onLoadResource(WebView view, String url) {
-                super.onLoadResource(view, url);
-            }
-
-            @Override
             public void onScaleChanged(WebView view, float oldScale, float newScale) {
                 super.onScaleChanged(view, oldScale, newScale);
             }
@@ -341,7 +342,6 @@ public class TestWebViewFragment extends BaseFragment implements IBackPressed {
             public void onUnhandledKeyEvent(WebView view, KeyEvent event) {
                 super.onUnhandledKeyEvent(view, event);
             }
-
         });
 
 //        mWebView.setDownloadListener(new DownloadListener() {
